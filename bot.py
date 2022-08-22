@@ -8,6 +8,10 @@ from discord.ext import commands
 
 from util.data.hashing import Hashing
 
+from dotenv import load_dotenv
+import asyncio
+
+
 print("Starting...")
 
 current_dir = osp.dirname(__file__)  # grab the current system directory on an os-independent level
@@ -17,7 +21,7 @@ data_path = "data"  # folder name
 extensions = ["background", "errors", "misc", "reactor", "utility", "verification"]
 
 # Load new intents system. This is required for the new reactors functionality.
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.guilds = True
 intents.members = True
 intents.messages = True
@@ -35,7 +39,7 @@ hash_key = None
 # Start config loading from environment variables.
 try:
 	print("Loading config...")
-
+	load_dotenv()
 	bot_token = os.environ["token"]
 	bot_key = os.environ["key"]
 	used_emails = os.environ["used_emails"]
@@ -90,18 +94,18 @@ async def on_ready():
 # Set up per-message checks.
 @bot.event
 async def on_message(message):
+	print(message.content)
 	if message.author == bot.user:
 		return
 	await bot.process_commands(message)
 
 
 # Loads extensions before running bot
-if __name__ == "__main__":
-
+async def load_cogs():
 	count = 0
 	for extension in extensions:
 		try:
-			bot.load_extension(f"cogs.{extension}")
+			await bot.load_extension(f"cogs.{extension}")
 			print(f"Cog | Loaded {extension}")
 			count += 1
 		except Exception as error:
@@ -109,7 +113,10 @@ if __name__ == "__main__":
 
 	print(f"Loaded {count}/{len(extensions)} cogs")
 
-if do_run:
-	bot.run(bot_token)
-else:
-	print("Startup aborted.")
+
+if __name__ == "__main__":
+	asyncio.run(load_cogs())
+	if do_run:
+		bot.run(bot_token)
+	else:
+		print("Startup aborted.")

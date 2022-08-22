@@ -63,10 +63,10 @@ class Verification(commands.Cog):
 		verify_email = ctx.guild.get_channel(self.channel_id)
 		# The line below contains the verify_help command text output.
 		await ctx.send(
-			f"To use this bot, please use `{self.bot_key}email {self.sample_username}@{self.verify_domain}` in {verify_email.mention} "
-			f"to receive an email with a **4 digit verification token.** Replace `{self.sample_username}@{self.verify_domain}` with "
+			f"To use this bot, please use command `{self.bot_key}email <your_username>@{self.verify_domain}` in {verify_email.mention} "
+			f"to receive an email with a **4 digit verification code.** Replace `<your_username>@{self.verify_domain}` with "
 			f"your own email, keeping in mind that the bot only accepts email addresses with `@{self.verify_domain}` at the end. "
-			f"**Wait for an email to be received**. If you don't receive an email after 5 minutes, try using the email "
+			f"**Wait for an email with the code to be received**. If you don't receive an email after 5 minutes, try using the email "
 			f"command again. **Send the command provided in the email** as a message in the {verify_email.mention} channel "
 			f"to gain access to the rest of the server."
 			f"\n\n**You can access your webmail at {self.webmail_link}**"
@@ -310,5 +310,6 @@ class Verification(commands.Cog):
 		await sendIn.send(f"Active verification tokens: \n{friendly_token_list}")
 
 
-def setup(bot):
-	bot.add_cog(Verification(bot))
+async def setup(bot):
+	await bot.add_cog(Verification(bot))
+	print("verfication is loaded******************")
