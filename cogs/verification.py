@@ -237,8 +237,11 @@ class Verification(commands.Cog):
 					await ctx.send(f"{ctx.author.mention}, you've been verified!")
 
 					role = discord.utils.get(ctx.guild.roles, name=self.role)
+					print(role)
 					if not role:
 						role = discord.utils.find(lambda r: str(r.id) == str(self.role), ctx.guild.roles)
+						print("no role")
+						print(role)
 					await ctx.author.add_roles(role)
 
 					with open(self.used_emails, 'a') as file:  # Writes used emails to file for verification
@@ -308,6 +311,11 @@ class Verification(commands.Cog):
 			friendly_token_list[f"<@{key}>"] = self.token_list[key]
 		sendIn = ctx.guild.get_channel(self.notify_id)
 		await sendIn.send(f"Active verification tokens: \n{friendly_token_list}")
+
+	@commands.command(name="clear", aliases=["clean"])
+	async def _clear(self, ctx):
+		channel = ctx.guild.get_channel(self.channel_id)
+		await channel.purge(limit=None, check=lambda msg: not msg.pinned)
 
 
 async def setup(bot):
