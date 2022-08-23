@@ -320,4 +320,3 @@ class Verification(commands.Cog):
 
 async def setup(bot):
 	await bot.add_cog(Verification(bot))
-	print("verfication is loaded******************")

@@ -94,7 +94,6 @@ async def on_ready():
 # Set up per-message checks.
 @bot.event
 async def on_message(message):
-	print(message.content)
 	if message.author == bot.user:
 		return
 	await bot.process_commands(message)
